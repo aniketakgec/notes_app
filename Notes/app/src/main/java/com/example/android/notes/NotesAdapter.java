@@ -2,7 +2,6 @@ package com.example.android.notes;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +33,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
         this.context = context;
         this.notesList = notesList;
     }
+
+
+
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -76,4 +78,22 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
 
         return "";
     }
+
+
+    public notes getData(int position) {
+        return notesList.get(position);
+    }
+    public void removeItem(int position) {
+        notesList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(notes item, int position) {
+        notesList.add(position, item);
+        notifyItemInserted(position);
+    }
+
+
+
+
 }

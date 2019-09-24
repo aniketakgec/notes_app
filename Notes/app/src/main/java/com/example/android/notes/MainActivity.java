@@ -7,9 +7,11 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 
 import android.speech.RecognizerIntent;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +19,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -71,8 +74,9 @@ public class MainActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        //recyclerView.addItemDecoration(new MyDividerItemDecoration( LinearLayoutManager.VERTICAL,this, 16));
         recyclerView.setAdapter(mAdapter);
+
+        enableSwipeToDeleteAndUndo();
 
         toggleEmptyNotes();
 
@@ -108,11 +112,57 @@ public class MainActivity extends AppCompatActivity {
             }
         }));
     }
+    private void enableSwipeToDeleteAndUndo() {
+        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(this) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
-    /**
-     * Inserting new note in db
-     * and refreshing the list
-     */
+
+                final int position = viewHolder.getAdapterPosition();
+                final notes item = mAdapter.getData(position);
+
+
+                db.deleteNote(item);
+
+                // removing the note from the list
+                notesList.remove(position);
+                mAdapter.notifyItemRemoved(position);
+                if(mAdapter.getItemCount()==0)
+                {
+
+                    noNotesView.setVisibility(View.VISIBLE);
+                    noNotesImageView.setVisibility(View.VISIBLE);
+
+                }
+
+
+                Snackbar snackbar = Snackbar
+                        .make(coordinatorLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        mAdapter.restoreItem(item, position);
+                        if (mAdapter.getItemCount()>0)
+                        {
+                            noNotesView.setVisibility(View.GONE);
+                            noNotesImageView.setVisibility(View.GONE);
+                        }
+                        recyclerView.scrollToPosition(position);
+                    }
+                });
+
+                snackbar.setActionTextColor(Color.YELLOW);
+                snackbar.show();
+
+            }
+        };
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
+    }
+
+
     private void createNote(String note) {
         // inserting note in db and getting
         // newly inserted note id
