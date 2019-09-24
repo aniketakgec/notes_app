@@ -19,13 +19,12 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView note;
-        public TextView dot;
         public TextView timestamp;
 
         public MyViewHolder(View view) {
             super(view);
             note = view.findViewById(R.id.note);
-            dot = view.findViewById(R.id.dot);
+
             timestamp = view.findViewById(R.id.timestamp);
         }
     }
@@ -50,8 +49,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
 
         holder.note.setText(note.getNote());
 
-        // Displaying dot from HTML character code
-        holder.dot.setText(Html.fromHtml("&#8226;"));
 
         // Formatting and displaying timestamp
         holder.timestamp.setText(formatDate(note.getTimestamp()));
@@ -71,7 +68,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
         try {
             SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = fmt.parse(dateStr);
-            SimpleDateFormat fmtOut = new SimpleDateFormat("MMM d");
+            SimpleDateFormat fmtOut = new SimpleDateFormat("dd MMM yyyy HH:mm:ss");
             return fmtOut.format(date);
         } catch (ParseException e) {
 

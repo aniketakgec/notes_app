@@ -23,21 +23,18 @@
         android:id="@+id/note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#f3f3f3"
         android:gravity="top"
-        android:hint="@string/hint_enter_note"
+        android:hint="Enter your note here ..."
         android:inputType="textCapSentences|textMultiLine"
         android:lines="5"
-
-        android:textColorHint="#000"
         android:textSize="@dimen/input_new_note" />
 
     <ImageView
         android:id="@+id/speech"
-        android:layout_width="65dp"
-        android:layout_height="67dp"
+        android:layout_width="48dp"
+        android:layout_height="46dp"
         android:onClick="speechtoText"
-        android:src="@mipmap/ic_launcher_foreground" />
+        android:src="@drawable/googlemin" />
 
 
 </LinearLayout>

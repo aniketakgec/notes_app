@@ -2,13 +2,16 @@ package com.example.android.notes;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import android.speech.RecognizerIntent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
- import android.support.v7.app.AlertDialog;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
@@ -43,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitleTextColor(0xFFFFFFFF);
+
 
         coordinatorLayout = findViewById(R.id.coordinator_layout);
         recyclerView = findViewById(R.id.recycler_view);
@@ -69,6 +75,21 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
 
         toggleEmptyNotes();
+
+        //======================toolbar font====================//
+        for(int i = 0; i < toolbar.getChildCount(); i++)
+        { View view = toolbar.getChildAt(i);
+
+            if(view instanceof TextView) {
+                TextView textView = (TextView) view;
+
+                Typeface myCustomFont=Typeface.createFromAsset(getAssets(),"Pacifico.ttf");
+                textView.setTypeface(myCustomFont); }
+
+
+        }
+
+        //============toolbar font ends here===================//
 
         /**
          * On long press on RecyclerView item, open alert dialog
