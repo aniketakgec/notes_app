@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -93,7 +94,13 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.MyViewHolder
         notifyItemInserted(position);
     }
 
+public void updateList(List<notes> newList){
+notesList=new ArrayList<>();
+notesList.addAll(newList);
+notifyDataSetChanged();
 
+
+}
 
 
 }

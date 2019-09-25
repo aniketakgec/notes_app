@@ -18,11 +18,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -33,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     private NotesAdapter mAdapter;
     private List<notes> notesList = new ArrayList<>();
     private CoordinatorLayout coordinatorLayout;
@@ -372,8 +375,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
 
+        getMenuInflater().inflate(R.menu.toolbar_search,menu);
+        MenuItem menuItem=menu.findItem(R.id.search);
+        SearchView searchView=(SearchView)menuItem.getActionView();
+        searchView.setOnQueryTextListener(this);
+        return true;
+    }
 
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        return false;
+    }
 
+    @Override
+    public boolean onQueryTextChange(String s) {
 
+        String userInput=s.toLowerCase();
+        List<notes> newList=new ArrayList<>();
+        for (notes n:notesList){
+
+            if (n.getNote().toLowerCase().contains(userInput))
+            {
+                newList.add(n);
+            }
+
+        }
+        mAdapter.updateList(newList);
+        return true;
+    }
 }
